@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CORRUGATE — From Paper to Packaging</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#171916;--kraft:#B9824A;--org:#F28C38;--cream:#F4F0E8;--w:#fff;--tex:repeating-linear-gradient(90deg,rgba(0,0,0,.06) 0 2px,transparent 2px 6px),linear-gradient(#c99560,#aa7440);--h:'Barlow Condensed','Arial Narrow',Impact,sans-serif;--b:'Barlow',Arial,sans-serif}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--cream);font:400 18px/1.6 var(--b);overflow-x:hidden}
+h1,h2{font:800 clamp(2.6rem,7vw,6rem)/.92 var(--h);text-transform:uppercase;letter-spacing:-.01em}
+p{max-width:34em;opacity:.85}
+.pgbar{position:fixed;top:0;left:0;height:4px;width:100%;background:var(--org);transform-origin:left;transform:scaleX(0);z-index:50;box-shadow:0 0 12px var(--org)}
+nav{position:fixed;top:4px;left:0;right:0;z-index:40;display:flex;align-items:center;gap:22px;padding:14px 4vw;background:linear-gradient(var(--ink),transparent)}
+nav b{font:800 1.5rem var(--h);letter-spacing:.08em;margin-right:auto}
+nav a{color:var(--cream);text-decoration:none;font-size:.85rem;opacity:.6;padding:4px 0;border-bottom:2px solid transparent;transition:.3s}
+nav a.on,nav a:hover{opacity:1;border-color:var(--org)}
+#pp{background:none;border:1.5px solid var(--org);color:var(--org);border-radius:99px;padding:6px 16px;cursor:pointer;font:500 .8rem var(--b)}
+#pp:hover{background:var(--org);color:var(--ink)}
+.tl{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;gap:12px}
+.tl a{width:12px;height:12px;border-radius:50%;border:2px solid var(--kraft);position:relative;transition:.3s}
+.tl a.on{background:var(--org);border-color:var(--org);box-shadow:0 0 10px var(--org);transform:scale(1.4)}
+.tl a span{position:absolute;right:22px;top:-4px;white-space:nowrap;font-size:.75rem;opacity:0;transition:.3s;pointer-events:none}
+.tl a:hover span{opacity:1}
+#top{position:fixed;right:22px;bottom:22px;z-index:40;width:46px;height:46px;border-radius:50%;border:0;background:var(--org);color:var(--ink);font:800 1.2rem var(--h);cursor:pointer;opacity:0;pointer-events:none;transition:.3s}
+#top.s{opacity:1;pointer-events:auto}#top:hover{transform:translateY(-4px)}
+.glow{position:fixed;width:340px;height:340px;margin:-170px;border-radius:50%;background:radial-gradient(rgba(242,140,56,.16),transparent 65%);pointer-events:none;z-index:1;left:0;top:0}
+section{position:relative;padding:14vh 7vw;min-height:100vh}
+.num{font:800 clamp(5rem,14vw,12rem)/.8 var(--h);color:transparent;-webkit-text-stroke:2px var(--kraft);opacity:.5;display:block}
+.split{display:grid;grid-template-columns:1fr 1.3fr;gap:5vw;align-items:center}
+.split.r{grid-template-columns:1.3fr 1fr}.split.r .tx{order:2}
+.tx p{margin-top:1.4rem}
+.light{background:var(--cream);color:var(--ink)}.light .num{-webkit-text-stroke-color:var(--kraft)}
+.stage{height:230vh;padding:0}.stage .in{position:sticky;top:0;height:100vh;padding:12vh 7vw 6vh;display:flex;flex-direction:column;justify-content:center;gap:3vh;overflow:hidden}
+.stage .hd{display:flex;gap:3vw;align-items:flex-end;flex-wrap:wrap}.stage .hd p{margin-bottom:.4rem}
+svg{width:100%;height:auto;display:block}
+.cap{font-size:.8rem;opacity:.6}
+/* hero */
+#hero{display:grid;place-items:center;text-align:center;overflow:hidden;background:radial-gradient(circle at 50% 60%,#2a2a24,var(--ink) 70%)}
+#hero h1{font-size:clamp(3rem,10vw,9rem);position:relative;z-index:3}
+#hero h1 i{display:inline-block;font-style:normal;opacity:0;transform:translateY(80px) rotateX(-80deg);animation:ch .9s cubic-bezier(.2,.9,.2,1) forwards}
+@keyframes ch{to{opacity:1;transform:none}}
+#hero p{margin:1.4rem auto;position:relative;z-index:3}
+.btn{display:inline-block;background:var(--org);color:var(--ink);font:800 1.1rem var(--h);letter-spacing:.1em;padding:16px 34px;text-decoration:none;position:relative;z-index:3;transition:.3s;box-shadow:0 0 0 0 rgba(242,140,56,.6);animation:pulse 2.4s infinite}
+.btn:hover{transform:translateY(-4px) scale(1.04);background:var(--w)}
+@keyframes pulse{70%{box-shadow:0 0 0 18px transparent}}
+.layer{position:absolute;inset:0;pointer-events:none}
+.sheet{position:absolute;width:150px;height:100px;background:var(--tex);opacity:.35;box-shadow:0 10px 30px #0008;animation:fl 9s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-40px) rotate(12deg)}}
+.strip{position:absolute;height:14px;width:300px;background:var(--kraft);opacity:.5;animation:sl 14s linear infinite}
+@keyframes sl{from{transform:translateX(-400px)}to{transform:translateX(110vw)}}
+.cw{perspective:1000px;position:absolute;right:8vw;bottom:12vh;z-index:2;opacity:.95}
+.cube{--s:200px;width:var(--s);height:var(--s);position:relative;transform-style:preserve-3d;animation:spin 20s linear infinite}
+@keyframes spin{from{transform:rotateX(-22deg) rotateY(0)}to{transform:rotateX(-22deg) rotateY(360deg)}}
+.cube div{position:absolute;inset:0;background:var(--tex);border:1px solid #0003;display:grid;place-items:center;font:800 1.7rem var(--h);color:#4a2f14;letter-spacing:.1em}
+.cube .a{transform:translateZ(calc(var(--s)/2))}.cube .b{transform:rotateY(90deg) translateZ(calc(var(--s)/2));filter:brightness(.85)}
+.cube .c{transform:rotateY(180deg) translateZ(calc(var(--s)/2))}.cube .d{transform:rotateY(-90deg) translateZ(calc(var(--s)/2));filter:brightness(.85)}
+.cube .e{transform:rotateX(90deg) translateZ(calc(var(--s)/2));filter:brightness(1.15)}.cube .f{transform:rotateX(-90deg) translateZ(calc(var(--s)/2));filter:brightness(.6)}
+.cube .e:after{content:"";position:absolute;left:0;right:0;top:44%;height:12%;background:#e9d9b8;opacity:.7}
+.scroll{position:absolute;bottom:4vh;left:50%;width:2px;height:60px;background:linear-gradient(var(--org),transparent);animation:sc 1.8s infinite;z-index:3}
+@keyframes sc{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+/* svg anim */
+.rot{transform-box:fill-box;transform-origin:center;animation:rot 8s linear infinite}.rot.rev{animation-direction:reverse}.rot.f{animation-duration:3s}
+@keyframes rot{to{transform:rotate(360deg)}}
+.flow{stroke-dasharray:14 8;animation:fw 1s linear infinite}@keyframes fw{to{stroke-dashoffset:-22}}
+.mv{animation:mv 7s linear infinite}@keyframes mv{from{transform:translateX(-120px)}to{transform:translateX(560px)}}
+.wave{animation:wv 1.6s linear infinite}@keyframes wv{from{transform:translateX(-40px)}to{transform:none}}
+.led{animation:bl 1.2s steps(2) infinite}@keyframes bl{50%{opacity:.15}}
+.dot{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--org);opacity:.5;animation:up 8s linear infinite}
+@keyframes up{to{transform:translateY(-90vh);opacity:0}}
+/* bonding */
+.bond{--q:clamp(0,calc((var(--p) - .1)/.6),1);position:relative;height:42vh;max-width:900px;width:100%;margin:0 auto}
+.bond>*{position:absolute;left:0;right:0}
+.liner{height:26px;background:var(--tex);box-shadow:0 8px 20px #0006}
+.bond .t{top:calc(50% - 13px - (1 - var(--q))*18vh)}.bond .bt{top:calc(50% + 24px + (1 - var(--q))*18vh)}
+.bond .fl{top:calc(50% - 13px);height:36px;opacity:calc(.35 + var(--q)*.65)}
+.bond .gl{height:5px;background:var(--org);box-shadow:0 0 10px var(--org);top:calc(50% - 15px);opacity:calc(1 - var(--q)*.6);transform:scaleX(clamp(0,calc((var(--p) - .5)*4),1));transform-origin:left;z-index:3}
+.bond.m1{--q:0}.bond.m2{--q:1}.bond.m1 .t,.bond.m1 .bt,.bond.m2 .t,.bond.m2 .bt,.bond.m1 .fl,.bond.m2 .fl{transition:top .9s cubic-bezier(.6,0,.2,1),opacity .9s}.bond .gl{transition:opacity .9s}.bond.m2 .gl{transform:none}.bond .tag{position:absolute;left:0;font-size:.8rem;font-weight:500;opacity:calc(1 - var(--q));pointer-events:none}.opts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.opts button{background:none;border:2px solid var(--ink);color:var(--ink);padding:8px 20px;border-radius:99px;cursor:pointer;font:500 .9rem var(--b);transition:.25s}.opts button:hover{border-color:var(--org)}.opts button.on{background:var(--org);border-color:var(--org)}.bond .lb{font-size:.85rem;color:var(--cream);left:auto;right:0;opacity:.7}
+/* cutting */
+.cut{position:relative;max-width:1000px;margin:0 auto;width:100%}
+.pcs{display:flex;--c:clamp(0,calc((var(--p) - .1)/.6),1);padding:30px 0}
+.pc{flex:1;height:110px;background:var(--tex);border:1px solid #0003;transform:translateX(calc(var(--i)*var(--c)*26px));box-shadow:0 10px 20px #0006;position:relative}
+.pc:after{content:"";position:absolute;inset:14px;border:2px dashed #fff;opacity:calc((var(--p) - .6)*3)}
+.pc:before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:2px dashed var(--ink);opacity:calc((var(--p) - .6)*3)}
+.blade{position:absolute;top:0;width:6px;height:150px;background:linear-gradient(#ddd,#888);box-shadow:0 0 10px var(--org);animation:ch2 2.4s ease-in infinite}
+@keyframes ch2{0%,60%,100%{transform:translateY(-130px)}75%{transform:translateY(10px)}}
+.belt{height:22px;margin-top:8px;background:repeating-linear-gradient(90deg,#333 0 24px,#444 24px 28px);animation:bm 1s linear infinite;border-radius:11px}
+@keyframes bm{to{background-position:28px 0}}
+/* print */
+.press{position:relative;max-width:900px;margin:0 auto;width:100%}
+.board{height:230px;background:var(--tex);position:relative;overflow:hidden;box-shadow:0 20px 40px #0007}
+.art{position:absolute;inset:0;display:grid;place-items:center;font:800 clamp(3rem,9vw,7rem) var(--h);color:var(--ink);letter-spacing:.06em;animation:pr 6s ease-in-out infinite;border:10px solid var(--ink);margin:18px}
+.art small{font:500 .9rem var(--b);letter-spacing:.3em;display:block;text-align:center}
+@keyframes pr{0%{clip-path:inset(0 100% 0 0)}80%,100%{clip-path:inset(0 0 0 0)}}
+.head{position:absolute;top:-20px;width:46px;height:270px;background:linear-gradient(90deg,#555,#999,#555);animation:hd 6s ease-in-out infinite;z-index:3;box-shadow:0 0 18px var(--org)}
+.head:after{content:"";position:absolute;bottom:0;left:0;right:0;height:10px;background:var(--org)}
+@keyframes hd{0%{left:0}80%,100%{left:calc(100% - 46px)}}
+.status{display:flex;gap:10px;align-items:center;margin-top:16px;font-size:.9rem}
+.status i{width:12px;height:12px;border-radius:50%;background:var(--org);animation:bl 1s steps(2) infinite;box-shadow:0 0 10px var(--org)}
+/* fold */
+.fold{--p:0;--t:clamp(0,calc((var(--p) - .1)/.5),1);--a:calc(clamp(0,calc((var(--p) - .15)/.4),1)*90deg);--f:calc(clamp(0,calc((var(--p) - .68)/.2),1)*90deg);--g:calc(clamp(0,calc((var(--p) - .52)/.16),1)*87deg);--sh:linear-gradient(rgba(0,0,0,.16),rgba(0,0,0,.16)),var(--tex);perspective:1100px;height:58vh;display:grid;place-items:center}
+.tpl{width:150px;height:150px;position:relative;transform-style:preserve-3d;transform:scale(calc(.72 + var(--t)*.7)) rotateX(calc(var(--t)*58deg)) rotateZ(calc(var(--t)*-32deg))}
+.tpl div{position:absolute;background:var(--tex);border:1px solid #0004;transform-style:preserve-3d;display:grid;place-items:center;font:800 1.3rem var(--h);color:#4a2f14}
+.tpl .bs{inset:0;background:var(--sh)}
+.tpl .fr{top:100%;left:0;width:150px;height:100px;transform-origin:top;transform:rotateX(var(--a))}
+.tpl .bk{bottom:100%;left:0;width:150px;height:100px;transform-origin:bottom;transform:rotateX(calc(var(--a)*-1));background:var(--sh)}
+.tpl .rt{left:100%;top:0;width:100px;height:150px;transform-origin:left;transform:rotateY(calc(var(--a)*-1));background:var(--sh)}
+.tpl .lf{right:100%;top:0;width:100px;height:150px;transform-origin:right;transform:rotateY(var(--a));background:var(--sh)}
+.tpl .fr i,.tpl .bk i{position:absolute;left:0;width:100%;height:75px;background:var(--tex);border:1px solid #0004}.tpl .rt i,.tpl .lf i{position:absolute;top:0;height:100%;width:62px;background:var(--sh);border:1px solid #0004}.tpl .rt i{left:100%;transform-origin:left;transform:rotateY(calc(var(--g)*-1))}.tpl .lf i{right:100%;transform-origin:right;transform:rotateY(var(--g))}
+.tpl .fr i{top:100%;transform-origin:top;transform:rotateX(var(--f))}.tpl .bk i{bottom:100%;transform-origin:bottom;transform:rotateX(calc(var(--f)*-1))}
+.tpl .gl2{inset:auto 0 0 auto;width:8px;height:100%;background:var(--org);box-shadow:0 0 12px var(--org);border:0;opacity:calc(1 - var(--t));animation:bl 1s steps(2) infinite}
+.msg{text-align:center;font:800 1.5rem var(--h);letter-spacing:.1em;color:var(--org);min-height:2rem}
+/* final */
+#final{overflow:hidden;background:radial-gradient(circle at 30% 50%,#2c2a22,var(--ink) 70%)}
+.fin{display:grid;grid-template-columns:1fr 1fr;gap:4vw;align-items:center;min-height:60vh}
+.fin .cw{position:relative;right:auto;bottom:auto;display:grid;place-items:center;height:340px}
+.fin h2{overflow:hidden}.fin h2 span{display:block;transform:translateY(110%);transition:transform 1.2s cubic-bezier(.2,.9,.2,1)}.fin.in h2 span{transform:none}
+.line{position:relative;height:150px;margin-top:6vh;overflow:hidden}
+.bx{position:absolute;bottom:22px;width:64px;height:48px;background:var(--tex);box-shadow:0 6px 14px #0008;animation:cvy 9s linear infinite;animation-delay:calc(var(--n)*-1.5s)}
+.bx:after{content:"";position:absolute;left:0;right:0;top:40%;height:14%;background:#e9d9b8;opacity:.6}
+@keyframes cvy{from{left:-80px}to{left:100%}}
+.stack{position:absolute;right:4vw;bottom:0;width:140px;display:flex;flex-direction:column-reverse;align-items:center}
+.stack b{width:64px;height:48px;background:var(--tex);margin:-1px;border:1px solid #0003;opacity:0;transform:translateY(-60px);transition:.6s}.fin.in~.line .stack b,.line.in .stack b{opacity:1;transform:none;transition-delay:calc(var(--n)*.5s)}
+.line .belt{position:absolute;bottom:0;left:0;right:0;margin:0}
+footer{padding:10vh 7vw 4vh;background:var(--cream);color:var(--ink)}
+footer .fg{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:5vw}
+footer b{font:800 clamp(2.6rem,6vw,5rem)/.9 var(--h);display:block;letter-spacing:.04em}
+footer h3{font:800 1.2rem var(--h);letter-spacing:.1em;text-transform:uppercase;color:var(--kraft);margin-bottom:.7rem}
+footer a:not(.btn),footer span{display:block;color:var(--ink);text-decoration:none;padding:3px 0;opacity:.8;font-size:.95rem}footer a:not(.btn):hover{color:var(--org);opacity:1}
+footer p{margin:1rem 0;opacity:.7}
+footer .fb{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:8vh;padding-top:1.4rem;border-top:2px solid var(--kraft)}
+@media(max-width:820px){footer .fg{grid-template-columns:1fr 1fr}.split,.split.r,.fin{grid-template-columns:1fr}.split.r .tx{order:0}nav a{display:none}.tl{display:none}.cw{right:50%;transform:translateX(50%) scale(.6);bottom:8vh;opacity:.45}.stage .in{padding:11vh 5vw 4vh}.cube{--s:150px}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}#hero h1 i{opacity:1;transform:none}}
+body.paused *{animation-play-state:paused!important}
+</style>
+</head>
+<body>
+<div class="pgbar" id="pg"></div><div class="glow" id="glow"></div>
+<nav><b>CORRUGATE</b><a href="#s2">Paper</a><a href="#s3">Wave</a><a href="#s4">Layers</a><a href="#s5">Cutting</a><a href="#s6">Printing</a><a href="#s7">Folding</a><a href="#s8">Product</a><button id="pp" aria-pressed="false">Pause animations</button></nav>
+<div class="tl" id="tl"></div>
+<button id="top" aria-label="Back to top">&uarr;</button>
+
+<section id="s1" data-n="Start"><div class="layer" data-d="12"><div class="sheet" style="left:6%;top:18%"></div><div class="sheet" style="left:72%;top:12%;animation-delay:-3s"></div><div class="sheet" style="left:14%;top:70%;animation-delay:-5s"></div></div>
+<div class="layer" data-d="30"><div class="strip" style="top:30%"></div><div class="strip" style="top:78%;animation-delay:-7s;width:200px"></div></div>
+<div><h1 id="h1">FROM PAPER TO PACKAGING.</h1><p>Discover the engineering behind every box. Explore how raw kraft paper transforms into durable corrugated packaging.</p><a class="btn" href="#s2">EXPLORE THE PROCESS</a></div>
+<div class="cw" data-d="-18"><div class="cube"><div class="a">CORRUGATE</div><div class="b"></div><div class="c">CORRUGATE</div><div class="d"></div><div class="e"></div><div class="f"></div></div></div><span class="scroll"></span></section>
+
+<section id="s2" data-n="Raw materials" class="split" style="background:#20231f"><div class="tx"><span class="num">01</span><h2 class="rv">It all starts with paper.</h2><p>Every corrugated box begins with high-quality kraft paper. Large paper rolls enter the manufacturing facility to begin their transformation.</p></div>
+<div class="rv" id="raw"><svg viewBox="0 0 800 380" role="img" aria-label="Kraft paper rolls unwinding onto a conveyor">
+<defs><g id="roll"><circle r="90" fill="#B9824A"/><circle r="72" fill="none" stroke="#8a5d30" stroke-width="3"/><circle r="52" fill="none" stroke="#8a5d30" stroke-width="3"/><circle r="30" fill="#e5cfa8"/><g stroke="#4a2f14" stroke-width="5"><path d="M-30 0H30M0 -30V30"/></g><circle r="8" fill="#171916"/></g></defs>
+<use class="rot" href="#roll" x="170" y="130"/><g transform="translate(400 150) scale(.75)"><use class="rot" href="#roll"/></g>
+<path class="flow" d="M258 130C285 250 300 290 350 308H790" fill="none" stroke="#B9824A" stroke-width="9"/><path class="flow" d="M452 150C470 240 470 290 470 308" fill="none" stroke="#c99560" stroke-width="7"/>
+<rect x="0" y="318" width="800" height="30" rx="15" fill="#333"/>
+<g fill="#6b6b66" stroke="#111" stroke-width="3"><g id="rl"></g></g>
+<g class="mv" style="animation-duration:9s"><rect x="0" y="296" width="110" height="12" fill="#e9d9b8"/></g><g class="mv" style="animation-delay:-4s;animation-duration:9s"><rect x="0" y="296" width="110" height="12" fill="#e9d9b8"/></g>
+<text x="12" y="372" fill="#F4F0E8" opacity=".6" font-size="14">Kraft rolls feed the line to the conveyor</text></svg></div></section>
+
+<section id="s3" data-n="Corrugating" class="light split r"><div class="rv"><svg viewBox="0 0 800 380" role="img" aria-label="Corrugating rollers shaping flat paper into flutes">
+<rect width="800" height="380" rx="10" fill="#e5ddcc"/>
+<clipPath id="cp"><rect x="410" y="170" width="390" height="60"/></clipPath>
+<path class="flow" d="M0 200H400" stroke="#B9824A" stroke-width="7" fill="none"/>
+<g clip-path="url(#cp)"><g class="wave"><path id="wv" fill="none" stroke="#B9824A" stroke-width="7"/></g></g>
+<g class="rot" style="transform-origin:400px 120px"><circle cx="400" cy="120" r="64" fill="#2b2d29" stroke="#F28C38" stroke-width="14" stroke-dasharray="14 14.4"/><circle cx="400" cy="120" r="42" fill="#555"/><path d="M370 120h60M400 90v60" stroke="#999" stroke-width="5"/></g>
+<g class="rot rev" style="transform-origin:400px 280px"><circle cx="400" cy="280" r="64" fill="#2b2d29" stroke="#F28C38" stroke-width="14" stroke-dasharray="14 14.4"/><circle cx="400" cy="280" r="42" fill="#555"/><path d="M370 280h60M400 250v60" stroke="#999" stroke-width="5"/></g>
+<rect x="20" y="300" width="200" height="60" rx="6" fill="#171916"/><circle class="led" cx="44" cy="330" r="7" fill="#F28C38"/><circle class="led" cx="68" cy="330" r="7" fill="#4ade80" style="animation-delay:-.4s"/><text x="90" y="336" fill="#F4F0E8" font-size="15">STEAM 180°C</text></svg></div>
+<div class="tx"><span class="num">02</span><h2 class="rv">Creating the wave.</h2><p>Heated corrugating rollers transform flat kraft paper into a wave-shaped structure known as fluting.</p></div></section>
+
+<section id="s4" class="stage light" data-n="Bonding" data-scrub><div class="in"><div class="hd"><div><span class="num" style="font-size:6rem">03</span><h2>Strength in every layer.</h2></div><p>The fluted medium is bonded between flat linerboards to create strong corrugated cardboard. Scroll to watch the layers close.</p></div>
+<div class="bond"><div class="liner t"></div><svg class="fl" viewBox="0 0 900 36" preserveAspectRatio="none"><path id="zz" fill="none" stroke="#B9824A" stroke-width="5"/></svg><div class="gl"></div><div class="liner bt"></div><span class="tag" style="top:calc(50% - 13px - (1 - var(--q))*18vh - 22px)">Top linerboard</span><span class="tag" style="top:calc(50% - 40px)">Fluted medium (adhesive on flute tips)</span><span class="tag" style="top:calc(50% + 24px + (1 - var(--q))*18vh + 30px)">Bottom linerboard</span></div><div class="opts" id="opts"><button data-m="" class="on">Follow scroll</button><button data-m="m1">Exploded view</button><button data-m="m2">Assembled board</button></div></div></section>
+
+<section id="s5" class="stage" data-n="Cutting" data-scrub style="background:#20231f"><div class="in"><div class="hd"><div><span class="num" style="font-size:6rem">04</span><h2>Precision takes shape.</h2></div><p>Continuous corrugated board is cut into precise sheets and scored to create accurate folding lines.</p></div>
+<div class="cut"><div class="blade" style="left:25%"></div><div class="blade" style="left:50%;animation-delay:.15s"></div><div class="blade" style="left:75%;animation-delay:.3s"></div><div class="pcs"><div class="pc" style="--i:0"></div><div class="pc" style="--i:1"></div><div class="pc" style="--i:2"></div><div class="pc" style="--i:3"></div></div><div class="belt"></div><span class="cap">Dashed lines mark the score and fold guides.</span></div></div></section>
+
+<section id="s6" data-n="Printing" class="light"><div class="split r"><div class="press rv"><div class="head"></div><div class="board"><div class="art"><div>CORRUGATE<small>HANDLE WITH CARE</small></div></div></div><div class="belt" style="margin-top:14px"></div><div class="status"><i></i>PRINT HEAD ACTIVE &middot; INK ROLLER ENGAGED</div></div>
+<div class="tx"><span class="num">05</span><h2 class="rv">Made to carry your brand.</h2><p>Custom designs, logos, and product information are printed onto the corrugated sheets.</p></div></div></section>
+
+<section id="s7" class="stage" data-n="Folding &amp; gluing" data-scrub style="background:var(--ink)"><div class="in"><div class="hd"><div><span class="num" style="font-size:6rem">06</span><h2>Flat sheet. Three-dimensional form.</h2></div><p>The cut and printed cardboard is folded and glued to create functional box structures.</p></div>
+<div class="fold" id="fold"><div class="tpl"><div class="bs">CORRUGATE</div><div class="fr"><i></i></div><div class="bk"><i></i></div><div class="rt"><i></i></div><div class="lf"><i></i></div><div class="gl2"></div></div></div><div class="msg" id="msg"></div></div></section>
+
+<section id="s8" data-n="Final product"><div id="final" class="fin rv"><div class="cw"><div class="cube" style="--s:190px"><div class="a">CORRUGATE</div><div class="b"></div><div class="c">CORRUGATE</div><div class="d"></div><div class="e"></div><div class="f"></div></div></div>
+<div><span class="num">07</span><h2><span>Ready to protect.</span><span>Ready to deliver.</span></h2><p style="margin-top:1.4rem">Finished corrugated boxes are inspected, stacked, and prepared for packaging and transportation.</p></div></div>
+<div class="line rv" id="line"><div class="bx" style="--n:0"></div><div class="bx" style="--n:1"></div><div class="bx" style="--n:2"></div><div class="bx" style="--n:3"></div><div class="bx" style="--n:4"></div><div class="stack"><b style="--n:0"></b><b style="--n:1"></b><b style="--n:2"></b><b style="--n:3"></b></div><div class="belt"></div></div></section>
+
+<footer id="ft"><div class="fg"><div><b>CORRUGATE</b><p>Engineering Protection. Delivering Possibilities.</p></div>
+<div><h3>The process</h3><a href="#s2">Raw materials</a><a href="#s3">Corrugating</a><a href="#s4">Bonding</a><a href="#s5">Cutting &amp; scoring</a><a href="#s6">Printing</a><a href="#s7">Folding &amp; gluing</a><a href="#s8">Final product</a></div>
+<div><h3>Contact</h3><a href="mailto:hello@corrugate.example">hello@corrugate.example</a><a href="tel:+910000000000">+91 00000 00000</a><span>Hyderabad, India</span></div>
+<div><h3>Start a project</h3><p>Tell us your box size, quantity and print needs.</p><a class="btn" href="mailto:hello@corrugate.example" style="animation:none;margin-top:10px">REQUEST A QUOTE</a></div></div>
+<div class="fb"><span>&copy; 2026 CORRUGATE. All rights reserved.</span><a href="#s1">Back to top &uarr;</a></div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script>
+addEventListener('DOMContentLoaded',()=>{
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+// hero text split
+const h=$('#h1');let k=0;h.innerHTML=h.textContent.split(' ').map(w=>'<span style="display:inline-block;white-space:nowrap">'+[...w].map(c=>`<i style="animation-delay:${(k++)*45+200}ms">${c}</i>`).join('')+'</span>').join(' ');
+// generated svg paths
+let w='M0 200';for(let i=0;i<30;i++)w+='q10 -28 20 0q10 28 20 0';$('#wv').setAttribute('d',w);
+let z='M0 32';for(let i=1;i<=45;i++)z+=`L${i*20} ${i%2?4:32}`;$('#zz').setAttribute('d',z);
+let r='';for(let x=20;x<800;x+=60)r+=`<g transform="translate(${x} 333)"><circle r="11"/><path class="rot f" d="M-8 0H8M0 -8V8" stroke="#aaa" stroke-width="3"/></g>`;$('#rl').innerHTML=r;
+for(let i=0;i<18;i++){const d=document.createElement('i');d.className='dot';d.style.cssText=`left:${Math.random()*100}%;bottom:${Math.random()*30}%;animation-delay:${-Math.random()*8}s;animation-duration:${6+Math.random()*6}s`;$('#s2').appendChild(d)}
+// timeline
+const secs=$$('section[data-n]'),tl=$('#tl');
+secs.forEach(s=>{const a=document.createElement('a');a.href='#'+s.id;a.innerHTML='<span>'+s.dataset.n+'</span>';a.setAttribute('aria-label',s.dataset.n);tl.appendChild(a)});
+const dots=[...tl.children],links=$$('nav a');
+// scroll loop
+const scr=$$('[data-scrub]'),par=$$('[data-d]'),pg=$('#pg'),top=$('#top'),msg=$('#msg'),fold=$('#fold');let tick=0;
+const msgs=['Flat template','Panels fold upward','Side flaps and top flaps fold inward','Glue seals the joint'];
+function up(){tick=0;const y=scrollY,H=document.documentElement.scrollHeight-innerHeight;pg.style.transform=`scaleX(${H?y/H:0})`;top.classList.toggle('s',y>innerHeight);
+scr.forEach(s=>{const r=s.getBoundingClientRect(),p=Math.min(1,Math.max(0,-r.top/(r.height-innerHeight)));s.style.setProperty('--p',p.toFixed(3));if(s.id==='s7'){fold.style.setProperty('--p',p.toFixed(3));msg.textContent=msgs[p<.12?0:p<.52?1:p<.88?2:3]}});
+if(y<innerHeight)par.forEach(e=>e.style.transform=`translate(${mx*e.dataset.d}px,${my*e.dataset.d+y*e.dataset.d/200}px)`);
+let cur=0;secs.forEach((s,i)=>{if(s.getBoundingClientRect().top<innerHeight*.5)cur=i});dots.forEach((d,i)=>d.classList.toggle('on',i===cur));links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+secs[cur].id))}
+let mx=0,my=0;const req=()=>{if(!tick)tick=requestAnimationFrame(up)};
+addEventListener('scroll',req,{passive:true});addEventListener('resize',req);
+const gl=$('#glow');addEventListener('mousemove',e=>{gl.style.transform=`translate(${e.clientX}px,${e.clientY}px)`;mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;req()},{passive:true});
+const bd=$('.bond');$$('#opts button').forEach(b=>b.onclick=()=>{bd.classList.remove('m1','m2');if(b.dataset.m)bd.classList.add(b.dataset.m);$$('#opts button').forEach(x=>x.classList.toggle('on',x===b))});
+top.onclick=()=>scrollTo({top:0});
+const pp=$('#pp');pp.onclick=()=>{const p=document.body.classList.toggle('paused');pp.textContent=p?'Play animations':'Pause animations';pp.setAttribute('aria-pressed',p)};
+// reveals
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in')}}),{threshold:.25});
+$$('.rv,#line').forEach(e=>io.observe(e));
+addEventListener('load',()=>{if(window.gsap&&window.ScrollTrigger&&!matchMedia('(prefers-reduced-motion:reduce)').matches){gsap.registerPlugin(ScrollTrigger);
+$$('.split h2,.split .num,.split svg,.press').forEach(e=>gsap.from(e,{y:70,opacity:0,duration:1,ease:'power3.out',scrollTrigger:{trigger:e,start:'top 85%'}}));
+$$('.stage h2').forEach(e=>gsap.from(e,{y:50,opacity:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:e.closest('.stage'),start:'top 70%'}}))}});
+up()});
+</script>
+</body>
+</html>
